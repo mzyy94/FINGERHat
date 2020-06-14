@@ -2,11 +2,17 @@
 #include "fingerhat.h"
 
 FingerHat finger;
+uint8_t count;
 
 void setup() {
   M5.begin();
   finger.setup();
-  M5.Lcd.println("FingerHat");
+  finger.getUserCount();
+  count = finger.res[IDX_Q2];
+  M5.Lcd.print("FingerHat ");
+  M5.Lcd.setTextColor(RED);
+  M5.Lcd.println(count);
+  M5.Lcd.setTextColor(WHITE);
 }
 
 void loop() {
@@ -16,15 +22,15 @@ void loop() {
     M5.Lcd.fillRect(0, 20, 160, 60, BLACK);
     M5.Lcd.setCursor(0, 20);
     M5.Lcd.setTextColor(WHITE);
-    M5.Lcd.println("Number of Users");
-    ret = finger.getUserCount();
+    M5.Lcd.printf("Add %d\n", count);
+    ret = finger.addUser(count, 1);
     if (ret >= ERR_IO_ERROR) {
       M5.Lcd.setTextColor(RED);
       M5.Lcd.printf("Error: %02x", ret);
     } else {
       M5.Lcd.setTextColor(GREEN);
       M5.Lcd.printf("ACK: %02x\n", ret);
-      M5.Lcd.printf("Count: %d", finger.res[IDX_Q2]);
+      count++;
     }
   }
 

@@ -19,18 +19,40 @@ uint8_t FingerHat::getUserCount() {
   return send(CMD_USER_COUNT);
 }
 
+uint8_t FingerHat::addUser(uint8_t id, uint8_t permission) {
+  uint8_t ret;
+  ret = send(CMD_USER_ADD_1, 0, id, permission, 3000);
+  CHECK_ERROR(ret != ACK_SUCCESS, ret);
+  ret = send(CMD_USER_ADD_2, 0, id, permission, 3000);
+  CHECK_ERROR(ret != ACK_SUCCESS, ret);
+  ret = send(CMD_USER_ADD_3, 0, id, permission, 3000);
+  return ret;
+}
+
 uint8_t FingerHat::send(uint8_t cmd) {
+  return send(cmd, 0, 0, 0, 300);
+}
+
+uint8_t FingerHat::send(uint8_t cmd,
+                        uint8_t p1,
+                        uint8_t p2,
+                        uint8_t p3,
+                        uint16_t timeout) {
   uint8_t req[8] = {0};
   uint8_t i;
 
   req[0] = req[7] = 0xF5;
   req[IDX_CMD] = cmd;
+  req[IDX_P1] = p1;
+  req[IDX_P2] = p2;
+  req[IDX_P3] = p3;
+
   for (i = 1; i < 6; i++) {
     req[IDX_CHK] ^= req[i];
   }
 
   CHECK_ERROR(Serial2.write(req, 8) != 8, ERR_IO_ERROR);
-  delay(300);
+  delay(timeout);
   CHECK_ERROR(!Serial2.available(), ERR_NO_DATA);
   CHECK_ERROR(Serial2.readBytes(res, 8) != 8, ERR_IO_ERROR);
   CHECK_ERROR(res[0] != 0xF5 || res[7] != 0xF5, ERR_INVALID_DATA);
