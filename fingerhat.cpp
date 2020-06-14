@@ -41,6 +41,27 @@ uint8_t FingerHat::getPermission(uint8_t id) {
   return send(CMD_GET_PERMISSION, 0, id, 0, 1000);
 }
 
+uint8_t FingerHat::captureImage(uint8_t* data, uint16_t* len) {
+  uint8_t ret;
+  uint16_t i, timeout = 3000;
+  uint8_t head[1], tail[2];
+
+  ret = send(CMD_IMAGE_CAPTURE, 3000);
+  CHECK_ERROR(ret != ACK_SUCCESS, ret);
+  *len = (((uint16_t)res[IDX_Q1]) * 256) + ((uint16_t)res[IDX_Q2]);
+  for (i = 0; i < timeout; i++) {
+    if (Serial2.available()) {
+      break;
+    }
+    delay(1);
+  }
+  CHECK_ERROR(i == timeout, ERR_NO_DATA);
+  CHECK_ERROR(Serial2.readBytes(head, 1) != 1, ERR_IO_ERROR);
+  CHECK_ERROR(Serial2.readBytes(data, *len) != *len, ERR_IO_ERROR);
+  CHECK_ERROR(Serial2.readBytes(tail, 2) != 2, ERR_IO_ERROR);
+  return ret;
+}
+
 uint8_t FingerHat::searchUser() {
   return send(CMD_SEARCH, 3000);
 }

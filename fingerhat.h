@@ -16,6 +16,7 @@
 #define CMD_GET_PERMISSION 0x0A
 #define CMD_IDENTIFY 0x0B
 #define CMD_SEARCH 0x0C
+#define CMD_IMAGE_CAPTURE 0x24
 
 #define ACK_SUCCESS 0x00
 #define ACK_FAIL 0x01
@@ -50,6 +51,7 @@ class FingerHat {
   uint8_t deleteUser(uint8_t id);
   uint8_t deleteAll();
   uint8_t getPermission(uint8_t id);
+  uint8_t captureImage(uint8_t* data, uint16_t* len);
   uint8_t searchUser();
   uint8_t identifyUser(uint8_t id);
 
