@@ -23,7 +23,7 @@ void loop() {
     M5.Lcd.setCursor(0, 20);
     M5.Lcd.setTextColor(WHITE);
     M5.Lcd.println("User Exists?");
-    ret = finger.getUser();
+    ret = finger.searchUser();
     if (ret >= ERR_IO_ERROR) {
       M5.Lcd.setTextColor(RED);
       M5.Lcd.printf("Error: %02x", ret);

@@ -11,7 +11,7 @@
 #define CMD_USER_ADD_1 0x01
 #define CMD_USER_ADD_2 0x02
 #define CMD_USER_ADD_3 0x03
-#define CMD_GET_USER 0x0C
+#define CMD_SEARCH 0x0C
 
 #define ACK_SUCCESS 0x00
 #define ACK_FAIL 0x01
@@ -43,7 +43,7 @@ class FingerHat {
   uint8_t sleep();
   uint8_t getUserCount();
   uint8_t addUser(uint8_t id, uint8_t permission);
-  uint8_t getUser();
+  uint8_t searchUser();
 
   uint8_t send(uint8_t cmd);
   uint8_t send(uint8_t cmd, uint16_t timeout);
