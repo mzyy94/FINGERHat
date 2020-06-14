@@ -30,11 +30,15 @@ uint8_t FingerHat::addUser(uint8_t id, uint8_t permission) {
 }
 
 uint8_t FingerHat::getUser() {
-  return send(CMD_GET_USER);
+  return send(CMD_GET_USER, 3000);
 }
 
 uint8_t FingerHat::send(uint8_t cmd) {
-  return send(cmd, 0, 0, 0, 300);
+  return send(cmd, 300);
+}
+
+uint8_t FingerHat::send(uint8_t cmd, uint16_t timeout) {
+  return send(cmd, 0, 0, 0, timeout);
 }
 
 uint8_t FingerHat::send(uint8_t cmd,

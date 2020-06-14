@@ -46,6 +46,7 @@ class FingerHat {
   uint8_t getUser();
 
   uint8_t send(uint8_t cmd);
+  uint8_t send(uint8_t cmd, uint16_t timeout);
   uint8_t send(uint8_t cmd,
                uint8_t p1,
                uint8_t p2,
