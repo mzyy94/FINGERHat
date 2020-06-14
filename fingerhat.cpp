@@ -39,7 +39,7 @@ uint8_t FingerHat::send(uint8_t cmd,
                         uint8_t p3,
                         uint16_t timeout) {
   uint8_t req[8] = {0};
-  uint8_t i;
+  uint16_t i;
 
   req[0] = req[7] = 0xF5;
   req[IDX_CMD] = cmd;
@@ -52,8 +52,13 @@ uint8_t FingerHat::send(uint8_t cmd,
   }
 
   CHECK_ERROR(Serial2.write(req, 8) != 8, ERR_IO_ERROR);
-  delay(timeout);
-  CHECK_ERROR(!Serial2.available(), ERR_NO_DATA);
+  for (i = 0; i < timeout; i++) {
+    if (Serial2.available()) {
+      break;
+    }
+    delay(1);
+  }
+  CHECK_ERROR(i == timeout, ERR_NO_DATA);
   CHECK_ERROR(Serial2.readBytes(res, 8) != 8, ERR_IO_ERROR);
   CHECK_ERROR(res[0] != 0xF5 || res[7] != 0xF5, ERR_INVALID_DATA);
   for (i = 1; i < 6; i++) {
