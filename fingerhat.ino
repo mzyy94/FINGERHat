@@ -22,18 +22,14 @@ void loop() {
     M5.Lcd.fillRect(0, 20, 160, 60, BLACK);
     M5.Lcd.setCursor(0, 20);
     M5.Lcd.setTextColor(WHITE);
-    M5.Lcd.println("User Exists?");
-    ret = finger.searchUser();
+    M5.Lcd.println("User 3?");
+    ret = finger.identifyUser(3);
     if (ret >= ERR_IO_ERROR) {
       M5.Lcd.setTextColor(RED);
       M5.Lcd.printf("Error: %02x", ret);
     } else {
       M5.Lcd.setTextColor(GREEN);
       M5.Lcd.printf("ACK: %02x\n", ret);
-      if (finger.res[IDX_Q3] <= 3) {
-        M5.Lcd.printf("ID:%2x PERM:%d\n", finger.res[IDX_Q2],
-                      finger.res[IDX_Q3]);
-      }
     }
   }
 

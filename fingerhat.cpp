@@ -33,6 +33,10 @@ uint8_t FingerHat::searchUser() {
   return send(CMD_SEARCH, 3000);
 }
 
+uint8_t FingerHat::identifyUser(uint8_t id) {
+  return send(CMD_IDENTIFY, 0, id, 0, 3000);
+}
+
 uint8_t FingerHat::send(uint8_t cmd) {
   return send(cmd, 300);
 }
