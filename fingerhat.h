@@ -31,18 +31,37 @@
 #define ERR_INVALID_DATA 0x12
 #define ERR_INVALID_CHK 0x13
 
-#define IDX_CMD 1
-#define IDX_P1 2
-#define IDX_P2 3
-#define IDX_P3 4
-#define IDX_Q1 2
-#define IDX_Q2 3
-#define IDX_Q3 4
-#define IDX_CHK 6
+#define MARKER 0xF5
+
+union command_t {
+  uint8_t buffer[8];
+  struct {
+    uint8_t begin;
+    uint8_t cmd;
+    uint8_t p1;
+    uint8_t p2;
+    uint8_t p3;
+    uint8_t zero;
+    uint8_t chk;
+    uint8_t end;
+  } tx;
+
+  struct {
+    uint8_t begin;
+    uint8_t cmd;
+    uint8_t q1;
+    uint8_t q2;
+    uint8_t q3;
+    uint8_t zero;
+    uint8_t chk;
+    uint8_t end;
+  } rx;
+};
 
 class FingerHat {
  public:
-  uint8_t res[8];
+  command_t req;
+  command_t res;
 
   void setup();
   uint8_t sleep();

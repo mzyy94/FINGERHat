@@ -48,7 +48,7 @@ uint8_t FingerHat::captureImage(uint8_t* data, uint16_t* len) {
 
   ret = send(CMD_IMAGE_CAPTURE, 3000);
   CHECK_ERROR(ret != ACK_SUCCESS, ret);
-  *len = (((uint16_t)res[IDX_Q1]) * 256) + ((uint16_t)res[IDX_Q2]);
+  *len = (((uint16_t)res.rx.q1) * 256) + ((uint16_t)res.rx.q2);
   for (i = 0; i < timeout; i++) {
     if (Serial2.available()) {
       break;
@@ -59,7 +59,7 @@ uint8_t FingerHat::captureImage(uint8_t* data, uint16_t* len) {
   CHECK_ERROR(Serial2.readBytes(head, 1) != 1, ERR_IO_ERROR);
   CHECK_ERROR(Serial2.readBytes(data, *len) != *len, ERR_IO_ERROR);
   CHECK_ERROR(Serial2.readBytes(tail, 2) != 2, ERR_IO_ERROR);
-  CHECK_ERROR(head[0] != 0xF5 || tail[1] != 0xF5, ERR_INVALID_DATA);
+  CHECK_ERROR(head[0] != MARKER || tail[1] != MARKER, ERR_INVALID_DATA);
   for (i = 0; i < *len; i++) {
     tail[0] ^= data[i];
   }
@@ -89,20 +89,21 @@ uint8_t FingerHat::send(uint8_t cmd,
                         uint8_t p2,
                         uint8_t p3,
                         uint16_t timeout) {
-  uint8_t req[8] = {0};
   uint16_t i;
+  uint8_t chk = 0;
 
-  req[0] = req[7] = 0xF5;
-  req[IDX_CMD] = cmd;
-  req[IDX_P1] = p1;
-  req[IDX_P2] = p2;
-  req[IDX_P3] = p3;
+  req.tx.begin = req.tx.end = MARKER;
+  req.tx.cmd = cmd;
+  req.tx.p1 = p1;
+  req.tx.p2 = p2;
+  req.tx.p3 = p3;
+  req.tx.zero = req.tx.chk = 0;
 
   for (i = 1; i < 6; i++) {
-    req[IDX_CHK] ^= req[i];
+    req.tx.chk ^= req.buffer[i];
   }
+  CHECK_ERROR(Serial2.write(req.buffer, 8) != 8, ERR_IO_ERROR);
 
-  CHECK_ERROR(Serial2.write(req, 8) != 8, ERR_IO_ERROR);
   for (i = 0; i < timeout; i++) {
     if (Serial2.available()) {
       break;
@@ -110,11 +111,12 @@ uint8_t FingerHat::send(uint8_t cmd,
     delay(1);
   }
   CHECK_ERROR(i == timeout, ERR_NO_DATA);
-  CHECK_ERROR(Serial2.readBytes(res, 8) != 8, ERR_IO_ERROR);
-  CHECK_ERROR(res[0] != 0xF5 || res[7] != 0xF5, ERR_INVALID_DATA);
+
+  CHECK_ERROR(Serial2.readBytes(res.buffer, 8) != 8, ERR_IO_ERROR);
+  CHECK_ERROR(res.rx.begin != MARKER || res.rx.end != MARKER, ERR_INVALID_DATA);
   for (i = 1; i < 6; i++) {
-    res[IDX_CHK] ^= res[i];
+    chk ^= res.buffer[i];
   };
-  CHECK_ERROR(res[IDX_CHK] != 0, ERR_INVALID_CHK);
-  return res[IDX_Q3];
+  CHECK_ERROR(res.rx.chk != chk, ERR_INVALID_CHK);
+  return res.rx.q3;
 }

@@ -8,7 +8,7 @@ void setup() {
   M5.begin();
   finger.setup();
   finger.getUserCount();
-  count = finger.res[IDX_Q2];
+  count = finger.res.rx.q2;
   M5.Lcd.print("FingerHat ");
   M5.Lcd.setTextColor(RED);
   M5.Lcd.println(count);
