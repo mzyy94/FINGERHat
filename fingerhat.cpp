@@ -59,6 +59,12 @@ uint8_t FingerHat::captureImage(uint8_t* data, uint16_t* len) {
   CHECK_ERROR(Serial2.readBytes(head, 1) != 1, ERR_IO_ERROR);
   CHECK_ERROR(Serial2.readBytes(data, *len) != *len, ERR_IO_ERROR);
   CHECK_ERROR(Serial2.readBytes(tail, 2) != 2, ERR_IO_ERROR);
+  CHECK_ERROR(head[0] != 0xF5 || tail[1] != 0xF5, ERR_INVALID_DATA);
+  for (i = 0; i < *len; i++) {
+    tail[0] ^= data[i];
+  }
+  CHECK_ERROR(tail[0] != 0, ERR_INVALID_CHK);
+
   return ret;
 }
 
