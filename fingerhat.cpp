@@ -29,6 +29,14 @@ uint8_t FingerHat::addUser(uint8_t id, uint8_t permission) {
   return ret;
 }
 
+uint8_t FingerHat::deleteUser(uint8_t id) {
+  return send(CMD_DELETE_UESR, 0, id, 0, 1000);
+}
+
+uint8_t FingerHat::deleteAll() {
+  return send(CMD_DELETE_ALL, 1000);
+}
+
 uint8_t FingerHat::searchUser() {
   return send(CMD_SEARCH, 3000);
 }

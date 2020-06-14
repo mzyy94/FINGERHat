@@ -11,6 +11,8 @@
 #define CMD_USER_ADD_1 0x01
 #define CMD_USER_ADD_2 0x02
 #define CMD_USER_ADD_3 0x03
+#define CMD_DELETE_UESR 0x04
+#define CMD_DELETE_ALL 0x05
 #define CMD_IDENTIFY 0x0B
 #define CMD_SEARCH 0x0C
 
@@ -44,6 +46,8 @@ class FingerHat {
   uint8_t sleep();
   uint8_t getUserCount();
   uint8_t addUser(uint8_t id, uint8_t permission);
+  uint8_t deleteUser(uint8_t id);
+  uint8_t deleteAll();
   uint8_t searchUser();
   uint8_t identifyUser(uint8_t id);
 
