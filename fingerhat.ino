@@ -15,6 +15,11 @@ void setup() {
   M5.Lcd.setTextColor(WHITE);
 }
 
+void draw4BitMonoPixel(int16_t x, int16_t y, uint8_t gray) {
+  uint16_t color = M5.Lcd.color565(gray << 4, gray << 4, gray << 4);
+  M5.Lcd.drawPixel(x, y, color);
+}
+
 void loop() {
   uint8_t ret;
   uint8_t data[4096];
@@ -38,14 +43,8 @@ void loop() {
         uint8_t x = 0, y = 80;
         for (i = 0; i < len; i++) {
           uint8_t buf = *(data + i);
-          uint16_t color;
-          uint8_t pixel;
-          pixel = (buf & 0x0f) << 4;
-          color = M5.Lcd.color565(pixel, pixel, pixel);
-          M5.Lcd.drawPixel(x++, y, color);
-          pixel = (buf >> 4) << 4;
-          color = M5.Lcd.color565(pixel, pixel, pixel);
-          M5.Lcd.drawPixel(x++, y, color);
+          draw4BitMonoPixel(x++, y, buf & 0x0f);
+          draw4BitMonoPixel(x++, y, buf >> 4);
           if (x >= 80) {
             x = 0;
             y++;
