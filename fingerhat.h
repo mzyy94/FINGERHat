@@ -7,6 +7,7 @@
 #define HAT_RX 0
 
 #define CMD_SLEEP 0x2C
+#define CMD_USER_COUNT 0x09
 
 #define ACK_SUCCESS 0x00
 #define ACK_FAIL 0x01
@@ -29,8 +30,11 @@
 
 class FingerHat {
  public:
+  uint8_t res[8];
+
   void setup();
   uint8_t sleep();
+  uint8_t getUserCount();
   uint8_t send(uint8_t cmd);
 
  private:
