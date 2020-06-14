@@ -61,7 +61,7 @@ union command_t {
   } rx;
 };
 
-class FingerHat {
+class CFingerHat {
  public:
   command_t req;
   command_t res;
@@ -87,5 +87,7 @@ class FingerHat {
 
  private:
 };
+
+extern CFingerHat FingerHat;
 
 #endif

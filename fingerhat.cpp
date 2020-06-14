@@ -6,20 +6,22 @@
       return value;             \
   } while (0)
 
-void FingerHat::setup() {
+CFingerHat FingerHat;
+
+void CFingerHat::setup() {
   Serial2.begin(19200, SERIAL_8N1, HAT_TX, HAT_RX);
   Serial2.setRxBufferSize(4096);
 }
 
-uint8_t FingerHat::sleep() {
+uint8_t CFingerHat::sleep() {
   return send(CMD_SLEEP);
 }
 
-uint8_t FingerHat::getUserCount() {
+uint8_t CFingerHat::getUserCount() {
   return send(CMD_USER_COUNT);
 }
 
-uint8_t FingerHat::addUser(uint8_t id, uint8_t permission) {
+uint8_t CFingerHat::addUser(uint8_t id, uint8_t permission) {
   uint8_t ret;
   ret = send(CMD_USER_ADD_1, 0, id, permission, 3000);
   CHECK_ERROR(ret != ACK_SUCCESS, ret);
@@ -29,19 +31,19 @@ uint8_t FingerHat::addUser(uint8_t id, uint8_t permission) {
   return ret;
 }
 
-uint8_t FingerHat::deleteUser(uint8_t id) {
+uint8_t CFingerHat::deleteUser(uint8_t id) {
   return send(CMD_DELETE_UESR, 0, id, 0, 1000);
 }
 
-uint8_t FingerHat::deleteAll() {
+uint8_t CFingerHat::deleteAll() {
   return send(CMD_DELETE_ALL, 1000);
 }
 
-uint8_t FingerHat::getPermission(uint8_t id) {
+uint8_t CFingerHat::getPermission(uint8_t id) {
   return send(CMD_GET_PERMISSION, 0, id, 0, 1000);
 }
 
-uint8_t FingerHat::captureImage(uint8_t* data, uint16_t* len) {
+uint8_t CFingerHat::captureImage(uint8_t* data, uint16_t* len) {
   uint8_t ret;
   uint16_t i, timeout = 3000;
   uint8_t head[1], tail[2];
@@ -72,27 +74,27 @@ uint8_t FingerHat::captureImage(uint8_t* data, uint16_t* len) {
   return ret;
 }
 
-uint8_t FingerHat::searchUser() {
+uint8_t CFingerHat::searchUser() {
   return send(CMD_SEARCH, 3000);
 }
 
-uint8_t FingerHat::identifyUser(uint8_t id) {
+uint8_t CFingerHat::identifyUser(uint8_t id) {
   return send(CMD_IDENTIFY, 0, id, 0, 3000);
 }
 
-uint8_t FingerHat::send(uint8_t cmd) {
+uint8_t CFingerHat::send(uint8_t cmd) {
   return send(cmd, 300);
 }
 
-uint8_t FingerHat::send(uint8_t cmd, uint16_t timeout) {
+uint8_t CFingerHat::send(uint8_t cmd, uint16_t timeout) {
   return send(cmd, 0, 0, 0, timeout);
 }
 
-uint8_t FingerHat::send(uint8_t cmd,
-                        uint8_t p1,
-                        uint8_t p2,
-                        uint8_t p3,
-                        uint16_t timeout) {
+uint8_t CFingerHat::send(uint8_t cmd,
+                         uint8_t p1,
+                         uint8_t p2,
+                         uint8_t p3,
+                         uint16_t timeout) {
   uint16_t i;
   uint8_t chk = 0;
 

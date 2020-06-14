@@ -1,14 +1,13 @@
 #include <M5StickC.h>
 #include "fingerhat.h"
 
-FingerHat finger;
 uint8_t count;
 
 void setup() {
   M5.begin();
-  finger.setup();
-  finger.getUserCount();
-  count = finger.res.rx.q2;
+  FingerHat.setup();
+  FingerHat.getUserCount();
+  count = FingerHat.res.rx.q2;
   M5.Lcd.print("FingerHat ");
   M5.Lcd.setTextColor(RED);
   M5.Lcd.println(count);
@@ -30,7 +29,7 @@ void loop() {
     M5.Lcd.setCursor(0, 20);
     M5.Lcd.setTextColor(WHITE);
     M5.Lcd.println("Capture Finger");
-    ret = finger.captureImage(data, &len);
+    ret = FingerHat.captureImage(data, &len);
     if (ret >= ERR_IO_ERROR) {
       M5.Lcd.setTextColor(RED);
       M5.Lcd.printf("Error: %02x", ret);
