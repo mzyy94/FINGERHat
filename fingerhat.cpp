@@ -9,7 +9,11 @@
 CFingerHat FingerHat;
 
 void CFingerHat::setup() {
-  Serial2.begin(19200, SERIAL_8N1, HAT_TX, HAT_RX);
+  setup(HAT_TX, HAT_RX);
+}
+
+void CFingerHat::setup(uint8_t pin_tx, uint8_t pin_rx) {
+  Serial2.begin(19200, SERIAL_8N1, pin_tx, pin_rx);
   Serial2.setRxBufferSize(4096);
 }
 

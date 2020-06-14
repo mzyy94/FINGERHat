@@ -67,6 +67,8 @@ class CFingerHat {
   command_t res;
 
   void setup();
+  void setup(uint8_t pin_tx, uint8_t pin_rx);
+
   uint8_t sleep();
   uint8_t getUserCount();
   uint8_t addUser(uint8_t id, uint8_t permission);
