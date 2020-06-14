@@ -13,6 +13,7 @@
 #define CMD_USER_ADD_3 0x03
 #define CMD_DELETE_UESR 0x04
 #define CMD_DELETE_ALL 0x05
+#define CMD_GET_PERMISSION 0x0A
 #define CMD_IDENTIFY 0x0B
 #define CMD_SEARCH 0x0C
 
@@ -48,6 +49,7 @@ class FingerHat {
   uint8_t addUser(uint8_t id, uint8_t permission);
   uint8_t deleteUser(uint8_t id);
   uint8_t deleteAll();
+  uint8_t getPermission(uint8_t id);
   uint8_t searchUser();
   uint8_t identifyUser(uint8_t id);
 

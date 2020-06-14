@@ -37,6 +37,10 @@ uint8_t FingerHat::deleteAll() {
   return send(CMD_DELETE_ALL, 1000);
 }
 
+uint8_t FingerHat::getPermission(uint8_t id) {
+  return send(CMD_GET_PERMISSION, 0, id, 0, 1000);
+}
+
 uint8_t FingerHat::searchUser() {
   return send(CMD_SEARCH, 3000);
 }
