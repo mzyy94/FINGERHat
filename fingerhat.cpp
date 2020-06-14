@@ -29,6 +29,10 @@ uint8_t FingerHat::addUser(uint8_t id, uint8_t permission) {
   return ret;
 }
 
+uint8_t FingerHat::getUser() {
+  return send(CMD_GET_USER);
+}
+
 uint8_t FingerHat::send(uint8_t cmd) {
   return send(cmd, 0, 0, 0, 300);
 }
