@@ -31,6 +31,9 @@
 #define ERR_INVALID_DATA 0x12
 #define ERR_INVALID_CHK 0x13
 
+#define MASK_ERROR 0x10
+#define MASK_ERROR_PAYLOAD 0x20
+
 #define MARKER 0xF5
 
 union command_t {
