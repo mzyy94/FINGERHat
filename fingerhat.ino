@@ -6,8 +6,7 @@ uint8_t count;
 void setup() {
   M5.begin();
   FingerHat.setup();
-  FingerHat.getUserCount();
-  count = FingerHat.res.rx.q2;
+  count = FingerHat.getUserCount();
   M5.Lcd.print("FingerHat ");
   M5.Lcd.setTextColor(RED);
   M5.Lcd.println(count);

@@ -22,7 +22,9 @@ uint8_t CFingerHat::sleep() {
 }
 
 uint8_t CFingerHat::getUserCount() {
-  return send(CMD_USER_COUNT);
+  uint8_t ret = send(CMD_USER_COUNT);
+  CHECK_ERROR(ret != ACK_SUCCESS, 0xFF);
+  return res.rx.q2;
 }
 
 uint8_t CFingerHat::addUser(uint8_t id, uint8_t permission) {
@@ -44,7 +46,9 @@ uint8_t CFingerHat::deleteAll() {
 }
 
 uint8_t CFingerHat::getPermission(uint8_t id) {
-  return send(CMD_GET_PERMISSION, 0, id, 0, 1000);
+  uint8_t ret = send(CMD_GET_PERMISSION, 0, id, 0, 1000);
+  CHECK_ERROR(ret == ACK_NOUSER, 0xFF);
+  return ret;
 }
 
 uint8_t CFingerHat::captureImage(uint8_t* data, uint16_t* len) {
@@ -79,7 +83,9 @@ uint8_t CFingerHat::captureImage(uint8_t* data, uint16_t* len) {
 }
 
 uint8_t CFingerHat::searchUser() {
-  return send(CMD_SEARCH, 3000);
+  uint8_t ret = send(CMD_SEARCH, 3000);
+  CHECK_ERROR(ret == ACK_NOUSER || ret == ACK_TIMEOUT, 0xFF);
+  return res.rx.q2;
 }
 
 uint8_t CFingerHat::identifyUser(uint8_t id) {
