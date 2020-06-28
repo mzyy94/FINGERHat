@@ -1,3 +1,11 @@
+/*
+ *  Copyright (c) 2020 Yuki MIZUNO
+ *  This file is part of FINGERHat - https://github.com/mzyy94/FINGERHat
+ *
+ *  SPDX-License-Identifier: MIT
+ *  See LICENSE for more information.
+ */
+
 #include "fingerhat.h"
 
 #define CHECK_ERROR(exp, value) \
